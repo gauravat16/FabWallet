@@ -1,7 +1,6 @@
 package com.fab.wallet.services;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.fab.wallet.bean.UserRequest;
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	protected EntityManager entityManager;
 
-	@Transactional(rollbackOn = { UserExistsException.class })
+	@Transactional(rollbackFor = { UserExistsException.class })
 	@Override
 	public User registerUser(UserRequest request) throws UserExistsException {
 
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
 						"No entry in database for user id - " + userId, "please check if userid is correct"));
 	}
 
-	@Transactional(rollbackOn = { UserNotFoundException.class })
+	@Transactional(rollbackFor = { UserNotFoundException.class })
 	@Override
 	public User updateDetails(UserRequest request) throws UserNotFoundException {
 		Assert.notNull(request, "Update user request is null!");

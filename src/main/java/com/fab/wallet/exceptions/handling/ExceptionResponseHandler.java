@@ -27,7 +27,7 @@ public class ExceptionResponseHandler {
 	@ExceptionHandler(value = { Exception.class })
 	private BaseException javaExceptionHandler(Exception exception) {
 		logger.debug(exception.getMessage(), exception);
-		return new BaseException(exception.getMessage(), "", "");
+		return new BaseException(exception.getClass().getName(), exception.getMessage(), "");
 	}
 
 }

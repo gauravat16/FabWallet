@@ -1,9 +1,9 @@
 package com.fab.wallet.services;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fab.wallet.entities.Transaction;
 import com.fab.wallet.entities.Transaction.TXN_TYPES;
@@ -29,7 +29,7 @@ public class WalletServiceImpl implements WalletService {
 	@Autowired
 	private WalletRepository walletRepository;
 
-	@Transactional(rollbackOn = { UserNotFoundException.class })
+	@Transactional(rollbackFor = { UserNotFoundException.class })
 	@Override
 	public Wallet getWalletDataForUser(String userId) throws UserNotFoundException, WalletNotFoundException {
 		User user = userService.getUserDetails(userId);
@@ -40,8 +40,8 @@ public class WalletServiceImpl implements WalletService {
 		return user.getWallet();
 	}
 
-	@Transactional(rollbackOn = { UserNotFoundException.class, WalletNotFoundException.class,
-			WalletBalanceLowException.class })
+	@Transactional(rollbackFor = { UserNotFoundException.class, WalletNotFoundException.class,
+			WalletBalanceLowException.class }, isolation=Isolation.SERIALIZABLE)
 	@Override
 	public Wallet performTransaction(String userId, TXN_TYPES txn_type, double amount)
 			throws UserNotFoundException, WalletNotFoundException, WalletBalanceLowException {
