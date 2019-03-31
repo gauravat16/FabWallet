@@ -1,8 +1,0 @@
-CREATE TABLE IF NOT EXISTS USER(
-
-user_id VARCHAR(255) PRIMARY KEY,
-first_name VARCHAR(255),
-last_name VARCHAR(255),
-password VARCHAR(255)
-
-); 

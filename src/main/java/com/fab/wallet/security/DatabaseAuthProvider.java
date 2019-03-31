@@ -1,10 +1,10 @@
 package com.fab.wallet.security;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,14 +18,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.fab.wallet.entities.User;
+import com.fab.wallet.exceptions.UserNotFoundException;
 import com.fab.wallet.services.UserService;
 
+/**
+ * Provides custom DB authentication.
+ * 
+ * @author gaurav
+ *
+ */
 @Component
 public class DatabaseAuthProvider implements AuthenticationProvider {
 
+	private static final Logger logger = LoggerFactory.getLogger(DatabaseAuthProvider.class);
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	PasswordEncoder encoder;
 
@@ -33,19 +42,22 @@ public class DatabaseAuthProvider implements AuthenticationProvider {
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String userName = authentication.getName();
 		String password = authentication.getCredentials().toString();
-		
-		Optional<User> user = userService.getUserDetails(userName);
-		if (!user.isPresent()) {
-			throw new UsernameNotFoundException("User doesn't exist in the DB!");
+
+		User user = null;
+		try {
+			user = userService.getUserDetails(userName);
+			if (encoder.matches(password, user.getPassword())) {
+				Set<GrantedAuthority> authorities = new HashSet<>();
+				authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+				return new UsernamePasswordAuthenticationToken(user.getUserId(), user.getPassword(), authorities);
+			} else {
+				throw new BadCredentialsException("Passwords didn't match!");
+			}
+		} catch (UserNotFoundException e) {
+			logger.debug(e.getErrorMsg(), e);
 		}
 
-		if (encoder.matches(password, user.get().getPassword())) {
-			Set<GrantedAuthority> authorities = new HashSet<>();
-			authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-			return new UsernamePasswordAuthenticationToken(user, user.get().getPassword(), authorities);
-		} else {
-			throw new BadCredentialsException("Passwords didn't match!");
-		}
+		throw new UsernameNotFoundException("Userid not found in DB");
 	}
 
 	@Override

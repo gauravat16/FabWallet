@@ -2,11 +2,14 @@ package com.fab.wallet.exceptions;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * 
  * @author gaurav
  *
  */
+@JsonIgnoreProperties({ "cause", "stackTrace", "methodName", "message", "localizedMessage", "suppressed" })
 public class BaseException extends Exception {
 
 	/**
@@ -56,6 +59,12 @@ public class BaseException extends Exception {
 
 	public void setResolution(String resolution) {
 		this.resolution = resolution;
+	}
+
+	@Override
+	public String toString() {
+		return "BaseException [timeStamp=" + timeStamp + ", errorMsg=" + errorMsg + ", desc=" + desc + ", resolution="
+				+ resolution + "]";
 	}
 
 }

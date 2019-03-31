@@ -2,6 +2,12 @@ package com.fab.wallet.bean;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * Pojo representing the request for User registration.
+ * 
+ * @author gaurav
+ *
+ */
 @Component
 public class UserRequest {
 
@@ -43,6 +49,11 @@ public class UserRequest {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@Override
+	public String toString() {
+		return "UserRequest [userId=" + userId + ", fname=" + fname + ", lName=" + lName + "]";
 	}
 
 }
