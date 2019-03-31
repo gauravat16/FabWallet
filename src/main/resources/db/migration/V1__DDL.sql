@@ -23,6 +23,7 @@ txn_id BIGINT AUTO_INCREMENT PRIMARY KEY,
 txn_type ENUM("CREDIT","DEBIT") NOT NULL,
 txn_total_amount DECIMAL(15,2) NOT NULL,
 txn_amount DECIMAL(15,2) NOT NULL,
+txn_time_stamp DATETIME NOT NULL,
 wallet_id BIGINT NOT NULL,
 FOREIGN KEY (wallet_id) REFERENCES WALLET(id)
 ); 
