@@ -88,10 +88,10 @@ public class UserServiceImpl implements UserService {
 		User user = getUserDetails(userid);
 
 		user.setfName(
-				(request.getFname() != null || !request.getFname().isEmpty()) ? request.getFname() : user.getfName());
+				(request.getFname() != null && !request.getFname().isEmpty()) ? request.getFname() : user.getfName());
 		user.setlName(
-				(request.getlName() != null || !request.getlName().isEmpty()) ? request.getlName() : user.getlName());
-		user.setPassword((request.getPassword() != null || !request.getPassword().isEmpty())
+				(request.getlName() != null && !request.getlName().isEmpty()) ? request.getlName() : user.getlName());
+		user.setPassword((request.getPassword() != null && !request.getPassword().isEmpty())
 				? passwordEncoder.encode(request.getPassword())
 				: user.getPassword());
 

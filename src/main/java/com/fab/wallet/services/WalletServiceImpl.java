@@ -41,7 +41,7 @@ public class WalletServiceImpl implements WalletService {
 	}
 
 	@Transactional(rollbackFor = { UserNotFoundException.class, WalletNotFoundException.class,
-			WalletBalanceLowException.class }, isolation=Isolation.SERIALIZABLE)
+			WalletBalanceLowException.class }, isolation = Isolation.READ_COMMITTED)
 	@Override
 	public Wallet performTransaction(String userId, TXN_TYPES txn_type, double amount)
 			throws UserNotFoundException, WalletNotFoundException, WalletBalanceLowException {

@@ -2,6 +2,8 @@ package com.fab.wallet.exceptions;
 
 import java.util.Date;
 
+import org.springframework.http.HttpStatus;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -10,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  *
  */
 @JsonIgnoreProperties({ "cause", "stackTrace", "methodName", "message", "localizedMessage", "suppressed" })
-public class BaseException extends Exception {
+public abstract class BaseException extends Exception {
 
 	/**
 	 * 
@@ -60,6 +62,8 @@ public class BaseException extends Exception {
 	public void setResolution(String resolution) {
 		this.resolution = resolution;
 	}
+
+	abstract public HttpStatus getHTTPStatusCode();
 
 	@Override
 	public String toString() {

@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.httpBasic().and().authorizeRequests()
-				.antMatchers("/wallet/api/v1/user/login", "/wallet/api/v1/user/update", "/wallet/api/v1/wallet/**")
+				.antMatchers("/wallet/api/v1/user/login", "/wallet/api/v1/user/update", "/wallet/api/v1/wallet/txn/*")
 				.hasAnyRole("USER").and().csrf().disable().headers().frameOptions().disable();
 		http.logout().logoutUrl("/wallet/api/v1/user/logout").logoutSuccessUrl("/");
 	}
